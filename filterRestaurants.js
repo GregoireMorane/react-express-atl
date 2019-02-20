@@ -6,8 +6,7 @@ resto.map(e => {
 	if ((e.id && e.name && e.annotation && e.to_website && e.address1 && e.address2 && e.image_url && e.latitude && e.longitude && e.categorisation && e.editorial_rating) !== undefined){
 		if((e.categorisation.primary && e.categorisation.secondary) !== undefined ){
 			filteredJson.push(
-				{ "id" : e.id,
-					"name" : e.name, 
+				{ "name" : e.name, 
 					"annotation" : e.annotation,
 					"timeoutUrl" : e.to_website,
 					"address1" : e.address1, 
