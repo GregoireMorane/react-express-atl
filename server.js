@@ -3,7 +3,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
-const router = require('./api/router');
+const routerRestaurants = require('./api/routes/restaurants');
+const routerAreas = require('./api/routes/areas');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(morgan("dev"));
 
-app.use('/restaurants', router);
+app.use('/restaurants', routerRestaurants);
+app.use('/areas', routerAreas);
 
 app.listen(3002);

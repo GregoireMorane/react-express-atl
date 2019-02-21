@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const connection = require('./conf');
+const connection = require('../conf');
 
 router.get('/', (req, res) => {
 	connection.query(`SELECT * FROM restaurants`,(err, results) => {
