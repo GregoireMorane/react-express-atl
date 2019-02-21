@@ -1,56 +1,67 @@
-const fs = require('fs');
-const resto = require('./restaurants.json');
+const { get, uniqWith } = require('lodash');
+const { writeFile } = require('fs-promise');
+const restaurants = require('./restaurants.json');
 
-const filteredJson = [];
-resto.map(e => {
-	if ((e.id && e.name && e.annotation && e.to_website && e.address1 && e.address2 && e.image_url && e.latitude && e.longitude && e.categorisation && e.editorial_rating) !== undefined){
-		if((e.categorisation.primary && e.categorisation.secondary) !== undefined ){
-			filteredJson.push(
-				{ "name" : e.name, 
-					"annotation" : e.annotation,
-					"timeoutUrl" : e.to_website,
-					"address1" : e.address1, 
-					"address2" : e.address2, 
-					"image_url" : e.image_url, 
-					"latitude" : e.latitude, 
-					"longitude" : e.longitude, 
-					"editorial_rating" : e.editorial_rating, 
-					"categories" : { "primary" : e.categorisation.primary.name, 
-										"secondary" : e.categorisation.secondary.name}
-									}
-			)
-		}
-	}
-})
-//console.log(filteredJson)
-fs.writeFileSync('cleaned-restaurants.json', JSON.stringify(filteredJson, null, 2));
+const restaurantsCleaned = restaurants
+  .map(restaurant => ({
+    name: restaurant.name,
+    address: restaurant.address1,
+	  city: restaurant.city,
+    mainCategory: get(restaurant, 'categorisation.primary.name'),
+    editorial_rating: restaurant.editorial_rating,
+    description: get(restaurant, 'description', ''),
+    to_website: get(restaurant, 'to_website', ''),
+    image_url: restaurant.image_url,
+    latitude: restaurant.latitude,
+    longitude: restaurant.longitude,
+	  area: get(restaurant, 'area.name'),
+  }))
+  .filter(restaurant => (
+    restaurant.name &&
+    restaurant.address &&
+	  restaurant.city &&
+    restaurant.mainCategory &&
+    restaurant.editorial_rating &&
+    restaurant.description &&
+    restaurant.image_url &&
+    restaurant.latitude &&
+    restaurant.longitude &&
+	  restaurant.area
+  ))
+  .sort((a, b) => b.editorial_rating - a.editorial_rating)
+// console.log(restaurantsCleaned)
 
-// fs.readFile('./restaurants.json', (err, data) => {
-// 	if(err){
-// 		throw err;
-// 	}
-// 	else{
-// 		const filteredJson = [];
-// 		JSON.parse(data).map(e => {
-// 			if ((e.id && e.name && e.annotation && e.address1 && e.address2 && e.image_url && e.latitude && e.longitude && e.categorisation && e.editorial_rating) !== undefined){
-// 				if((e.categorisation.primary && e.categorisation.secondary) !== undefined ){
-// 					filteredJson.push(
-// 						{ "id" : e.id,
-// 							"name" : e.name, 
-// 							"annotation" : e.annotation, 
-// 							"address1" : e.address1, 
-// 							"address2" : e.address2, 
-// 							"image_url" : e.image_url, 
-// 							"latitude" : e.latitude, 
-// 							"longitude" : e.longitude, 
-// 							"editorial_rating" : e.editorial_rating, 
-// 							"categories" : { "primary" : e.categorisation.primary.concept.name, 
-// 												"secondary" : e.categorisation.secondary.concept.name}
-// 											}
-// 					)
-// 				}
-// 			}
-// 		})
-// 		console.log(filteredJson)
-// 	}
-// })
+Array.prototype.unique = function () {
+  return this.filter(function (value, index, self) {
+    return self.indexOf(value) === index;
+  });
+}
+
+const areasCleaned = restaurants
+  .map((restaurant, index) => ({
+    area: get(restaurant, 'area.name'),
+  })).filter(restaurant => (
+    restaurant.area
+  ));
+
+const getUnique = (arr, comp) => {
+	const unique = arr
+		.map(e => e[comp])
+		.map((e, i, final) => final.indexOf(e) === i && i)
+		.filter(e => arr[e]).map(e => arr[e]);
+		return unique;
+}
+
+const newAreaCleaned = getUnique(areasCleaned, 'area');
+const lastAreaCleaned = newAreaCleaned.map((e, i) => ({
+	id: i + 1,
+	name : e.area
+}))
+
+//console.log(getUnique(areasCleaned,'area'))
+
+writeFile('restaurants-cleaned.json', JSON.stringify(restaurantsCleaned, null, '\t'))
+	.then(() => console.log('Wrote to file successfully'))
+
+writeFile('areas-cleaned.json', JSON.stringify(lastAreaCleaned, null, '\t'))
+  .then(() => console.log('Wrote to file successfully'))

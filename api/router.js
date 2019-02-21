@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const connection = require('./conf');
 
-router.get('/arrondissements/:x', (req, res) => {
-	connection.query(`SELECT * FROM cleaned_restaurants WHERE address2 = ?`, req.params.x,(err, results) => {
+router.get('/', (req, res) => {
+	connection.query(`SELECT * FROM restaurants`,(err, results) => {
 		if(err){
 			res.status(500).send("Error");
 		} else {
@@ -12,8 +12,8 @@ router.get('/arrondissements/:x', (req, res) => {
 	})
 })
 
-router.get('/categories_primary/:x', (req, res) => {
-	connection.query(`SELECT * FROM cleaned_restaurants WHERE categories_primary = ?`, req.params.x,(err, results) => {
+router.get('/category/:x', (req, res) => {
+	connection.query(`SELECT * FROM restaurants WHERE mainCategory = ?`, req.params.x, (err, results) => {
 		if(err){
 			res.status(500).send("Error");
 		} else {
@@ -22,8 +22,8 @@ router.get('/categories_primary/:x', (req, res) => {
 	})
 })
 
-router.get('/categories_secondary/:x', (req, res) => {
-	connection.query(`SELECT * FROM cleaned_restaurants WHERE categories_secondary = ?`, req.params.x,(err, results) => {
+router.get('/rating/:x', (req, res) => {
+	connection.query(`SELECT * FROM restaurants WHERE editorial_rating = ?`, req.params.x,(err, results) => {
 		if(err){
 			res.status(500).send("Error");
 		} else {
