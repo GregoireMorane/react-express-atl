@@ -60,7 +60,7 @@ class Areas extends Component {
 						<img src={e.image_url} alt={e.image_url} style={{width:200, height:100}}/>
 						<br />
 						<p>{e.description}</p>
-						<a href={e.to_website}>Clique Clique !</a>
+						<a target="_blank" rel="noopener noreferrer" href={e.to_website}>Page TimeOut du restaurant</a>
 					</div>
 				))}
 			</div>
