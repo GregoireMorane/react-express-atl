@@ -12,6 +12,16 @@ router.get('/', (req, res) => {
 	})
 })
 
+router.get('/single/:id', (req, res) => {
+	connection.query(`SELECT * FROM restaurants WHERE id = ?`,req.params.id,(err, results) => {
+		if(err){
+			res.status(500).send("Error");
+		} else {
+			res.status(200).json(results);
+		}
+	})
+})
+
 router.get('/category/:x', (req, res) => {
 	connection.query(`SELECT * FROM restaurants WHERE mainCategory = ?`, req.params.x, (err, results) => {
 		if(err){

@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(morgan("dev"));
 
-app.use('/restaurants', routerRestaurants);
-app.use('/areas', routerAreas);
+app.use('/api/restaurants', routerRestaurants);
+app.use('/api/areas', routerAreas);
 
 app.listen(3002);
