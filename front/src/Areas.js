@@ -50,14 +50,19 @@ class Areas extends Component {
 		}
 
 		return (
-			<div>
-				<select onChange={this.setId}>
-					<option>Choisissez un lieu</option>
+			<div style={{marginLeft : '20px'}}>
+				<h1
+				style={{fontFamily: 'Bad Script',    
+				color: '#404254'}}>Choisir un lieu :</h1>
+				<select onChange={this.setId} style={{
+					marginBottom : '30px'
+				}}>
+					<option>Lieu</option>
 					{this.state.areas.map((e,i) => (
 						<option value={e.id} key={i}>{e.name}</option>
 					))}
 				</select>
-				<div style={{height:500, width:600,float:"right"}}>
+				<div style={{height:500, width:700, float : "right"}}>
 					<Map center={[48.8534, 2.3488]} zoom={this.state.zoom} zoomControl={false} style={{height:500}}>
 						<TileLayer
 							attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -72,14 +77,29 @@ class Areas extends Component {
 				</div>
 				<div style={{width:400, float:"left"}}>
 				{this.state.restaurants.map((e,i) => (
-					<div key={i} style={{}}>
-						<Link to={`/resto/${e.id}`} style={{textDecoration:'none'}}>
-							<h3>{e.name}</h3>
-						</Link>
-						<img src={e.image_url} alt={e.image_url} style={{width:200, height:100}}/>
-						<br />
-						<p>{e.description}</p>
+					<Link to={`/resto/${e.id}`} style={{textDecoration:'none'}}>
+					<div key={i} style={{
+						boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+						transition: '0.3s',
+						paddingBottom : '20px',
+						marginBottom : '30px',
+						width : 500
+					}}>
+						<img src={e.image_url} alt={e.image_url} style={{maxWidth : '100%'}}/>
+						
+							<h3 style={{
+								fontFamily: 'Bad Script',    
+								color: '#404254', 
+								fontSize: '2em'}}>{e.name}</h3>
+						<p style={{
+							textAlign : 'center',
+							textDecoration:'none',
+							fontSize : '1,5em',
+							color : '#404254'
+						}}>{e.description}</p>
 					</div>
+					</Link>
+
 				))}
 				</div>
 				<div style={{clear:"both"}}></div>

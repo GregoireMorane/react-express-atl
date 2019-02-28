@@ -22,13 +22,20 @@ export default class Resto extends Component {
 		if(this.state.restaurants === null)
 			return "loading..."
 			return(
-				<div>
-					<img src={this.state.restaurants[0].image_url} alt={this.state.restaurants[0].image_url} style={{width:400, height:200}}/>
-					<h3>{this.state.restaurants[0].name}</h3>
-					<p>{this.state.restaurants[0].description}</p>
-					<p>{this.state.restaurants[0].address}</p>
-					<p>{this.state.restaurants[0].city}</p>
-					<SingleMap longitude={this.state.restaurants[0].longitude} latitude={this.state.restaurants[0].latitude} />
+				<div style={{margin:'30px'}}>
+					<h1 style={{
+						fontFamily: 'Bad Script',    
+						color: '#404254', }}>
+						{this.state.restaurants[0].name}  
+						<span style={{
+							fontSize: '1em', 
+							color: '#9494a6', 
+							marginLeft : '20px'}}>
+							{this.state.restaurants[0].address}, {this.state.restaurants[0].city}</span>
+					</h1>
+					<img src={this.state.restaurants[0].image_url} alt={this.state.restaurants[0].image_url} style={{maxWidth:'500px', float : 'left', margin : '30px auto'}}/>
+					<p style={{}}>{this.state.restaurants[0].description}</p>
+					<SingleMap style={{}} longitude={this.state.restaurants[0].longitude} latitude={this.state.restaurants[0].latitude} />
 				</div>
 			)
 	}
