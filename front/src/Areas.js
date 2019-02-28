@@ -70,7 +70,7 @@ class Areas extends Component {
 						<ZoomControl position="topright" />
 					</Map>
 				</div>
-				<div style={{width:400,float:"left"}}>
+				<div style={{width:400, float:"left"}}>
 				{this.state.restaurants.map((e,i) => (
 					<div key={i} style={{}}>
 						<Link to={`/resto/${e.id}`} style={{textDecoration:'none'}}>
