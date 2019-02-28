@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Map, TileLayer, Marker, ZoomControl } from 'react-leaflet';
 
 class Areas extends Component {
 
 	state = {
 		areas : null,
 		restaurants : null,
-		id : null
+		id : null,
+		zoom: 12
 	}
 
 	getAreas = () => {
 		axios
-			.get('http://localhost:3002/areas/')
+			.get('http://localhost:3002/api/areas/')
 			.then(res => {
 				this.setState({ areas : res.data})
 			})
@@ -19,7 +22,7 @@ class Areas extends Component {
 
 	FindRestaurantsByAreas = (id) => {
 		axios
-			.get(`http://localhost:3002/areas/${id}`)
+			.get(`http://localhost:3002/api/areas/${id}`)
 			.then(res => {
 				this.setState({ restaurants : res.data})
 			})
@@ -54,15 +57,32 @@ class Areas extends Component {
 						<option value={e.id} key={i}>{e.name}</option>
 					))}
 				</select>
+				<div style={{height:500, width:600,float:"right"}}>
+					<Map center={[48.8534, 2.3488]} zoom={this.state.zoom} zoomControl={false} style={{height:500}}>
+						<TileLayer
+							attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+						/>
+						{this.state.restaurants.map(e => (
+							<Marker position={[e.latitude, e.longitude]}>
+							</Marker>
+						))}
+						<ZoomControl position="topright" />
+					</Map>
+				</div>
+				<div style={{width:400,float:"left"}}>
 				{this.state.restaurants.map((e,i) => (
-					<div key={i}>
-						<h3>{e.name}</h3>
+					<div key={i} style={{}}>
+						<Link to={`/resto/${e.id}`} style={{textDecoration:'none'}}>
+							<h3>{e.name}</h3>
+						</Link>
 						<img src={e.image_url} alt={e.image_url} style={{width:200, height:100}}/>
 						<br />
 						<p>{e.description}</p>
-						<a target="_blank" rel="noopener noreferrer" href={e.to_website}>Page TimeOut du restaurant</a>
 					</div>
 				))}
+				</div>
+				<div style={{clear:"both"}}></div>
 			</div>
 		);
 	}

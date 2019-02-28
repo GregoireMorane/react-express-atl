@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:x', (req, res) => {
-	connection.query(`SELECT *, areas.name as area, restaurants.name as name FROM restaurants JOIN areas ON restaurants.id_area = areas.id WHERE areas.id = ?`, req.params.x, (err, results) => {
+	connection.query(`SELECT *, areas.name as area, restaurants.name as name, areas.id as area_id, restaurants.id as id FROM restaurants JOIN areas ON restaurants.id_area = areas.id WHERE areas.id = ?`, req.params.x, (err, results) => {
 		if(err){
 			res.status(500).send(err);
 		} else {
